@@ -624,6 +624,79 @@ a {
   .timeline-item small {
     grid-column: 1;
   }
+   
+/* 04 OBJECTS — EDITORIAL PRODUCT DIRECTORY
+   -------------------------------------------------------------------------- */
+
+.objects-intro {
+  max-width: 64ch;
+  margin-bottom: 2.75rem;
+  color: var(--ink-secondary);
+}
+
+.objects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.object-card {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-strong);
+}
+
+.object-category {
+  margin: 0 0 0.75rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.object-title {
+  margin: 0 0 0.65rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.object-description {
+  margin: 0 0 1rem;
+  color: var(--ink-secondary);
+  font-size: 1rem;
+}
+
+.object-link {
+  display: inline-block;
+  padding-block: 0.5rem;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-transform: uppercase;
+}
+
+.object-link:hover {
+  color: var(--accent);
+}
+
+.objects-disclosure {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--ink-secondary);
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 680px) {
+  .objects-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
 }
 
 @media (max-width: 680px) {
