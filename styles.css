@@ -1,3 +1,641 @@
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f0eee8;color:#191917;font-family:"DM Sans",sans-serif}a{color:inherit;text-decoration:none}.topline{height:34px;background:#191917;color:#d9d4c9;display:flex;justify-content:space-between;align-items:center;padding:0 5vw;font:10px "DM Mono",monospace;letter-spacing:.12em}.nav{height:78px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #d4d0c7;position:sticky;top:0;background:#f0eee8ed;backdrop-filter:blur(12px);z-index:10}.wordmark{font-size:14px;font-weight:700;letter-spacing:.05em}.wordmark span{font:10px "DM Mono",monospace;color:#8c5140}.nav nav{display:flex;gap:25px}.nav nav a,.menu-toggle{font:10px "DM Mono",monospace;letter-spacing:.08em}.nav nav a:hover,.text-link:hover,.press-list a:hover{color:#a4543d}.menu-toggle{display:none;background:none;border:0}.hero{min-height:670px;padding:90px 9vw 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:6vw;align-items:center;position:relative}.eyebrow,.section-kicker{font:10px "DM Mono",monospace;letter-spacing:.14em;color:#a4543d}.hero h1,.section-heading h2,.about h2,.press h2,.pro-intro h2,.contact h2{font-size:clamp(54px,7.4vw,108px);line-height:.95;letter-spacing:-.065em;font-weight:500;margin:25px 0}.hero h1 em,.section-heading h2 em,.about h2 em,.press h2 em,.pro-intro h2 em,.contact h2 em{font-family:"Playfair Display",serif;font-weight:500}.intro{font-size:17px;line-height:1.65;max-width:530px;color:#55534e}.hero-actions{display:flex;align-items:center;gap:28px;margin-top:38px}.button{padding:17px 20px;font:10px "DM Mono",monospace;letter-spacing:.1em}.button-dark{background:#1c1c19;color:#f1eee7}.button span{padding-left:22px}.text-link{font:10px "DM Mono",monospace;letter-spacing:.08em}.hero-image{height:490px;position:relative;overflow:hidden;background:#d8d2c7}.hero-image img{width:100%;height:100%;object-fit:cover;object-position:center}.image-note{position:absolute;bottom:16px;left:16px;background:#f0eee8;padding:9px 12px;font:9px "DM Mono",monospace;letter-spacing:.12em}.hero-index{position:absolute;bottom:26px;left:9vw;right:9vw;display:flex;justify-content:space-between;font:9px "DM Mono",monospace;color:#88847a}.section-pad{padding:105px 9vw}.about{background:#e5e1d8}.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:8vw;margin-top:35px}.about h2,.press h2,.contact h2{font-size:clamp(48px,6vw,82px);margin:0}.about-text{max-width:610px}.large-copy{font-size:23px;line-height:1.45;margin:0 0 24px}.about-text p:not(.large-copy){line-height:1.8;color:#5e5b54}.music{background:#191917;color:#f0eee8}.music .section-kicker{color:#c17a61}.section-heading{display:flex;justify-content:space-between;align-items:end;gap:40px;margin:35px 0 55px}.section-heading h2{font-size:clamp(48px,6vw,80px);margin:0}.section-heading>p{max-width:300px;line-height:1.7;color:#aaa69d;font-size:14px}.music-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:20px}.music-card{background:#292925}.music-card img{width:100%;height:250px;object-fit:cover;display:block;filter:saturate(.75)}.music-card>div{padding:24px}.music-card .eyebrow{color:#c17a61}.music-card h3{font-size:22px;font-weight:500;margin:13px 0}.music-card p{font-size:13px;line-height:1.7;color:#aaa69d;min-height:66px}.music-card a{display:inline-block;margin-top:15px;font:9px "DM Mono",monospace;letter-spacing:.1em;color:#d18b71}.creative{background:#d9d4ca}.gallery{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:16px;align-items:start}.gallery figure{margin:0}.gallery figure img{width:100%;height:370px;object-fit:cover;display:block}.gallery .gallery-large img{height:510px}.gallery figcaption{display:flex;justify-content:space-between;gap:12px;padding-top:12px;font:9px "DM Mono",monospace;letter-spacing:.08em;color:#6e695f}.creative-foot{display:flex;justify-content:space-between;align-items:center;gap:30px;margin-top:45px}.creative-foot p{max-width:600px;color:#6e695f;font-size:12px;line-height:1.7}.press{background:#a75b43;color:#f5eee6}.press .section-kicker{color:#f2c4ad}.press h2{margin:32px 0 65px}.press-list{border-top:1px solid #d49b88}.press-list a{display:grid;grid-template-columns:50px 1fr 2fr 25px;gap:20px;align-items:center;padding:23px 0;border-bottom:1px solid #d49b88}.press-list a span:first-child{font:10px "DM Mono",monospace;color:#f2c4ad}.press-list strong{font-size:16px}.press-list a span:nth-child(3){font-size:13px;color:#f0d9ce}.professional{background:#e9e6df}.pro-intro{display:flex;justify-content:space-between;gap:7vw;align-items:end;margin:40px 0 70px}.pro-intro h2{font-size:clamp(46px,6vw,78px);margin:20px 0 0}.pro-intro>p{max-width:350px;line-height:1.8;color:#5e5b54;font-size:14px}.pro-columns{display:grid;grid-template-columns:.8fr 1.2fr;gap:9vw;border-top:1px solid #c9c4ba;padding-top:35px}.pro-columns h3{font:10px "DM Mono",monospace;letter-spacing:.13em;color:#a4543d;margin:0 0 18px}.pro-columns>div>p{font-size:14px;line-height:1.8;color:#55534e;margin-bottom:40px}.skill-list{padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;font-size:12px;color:#45433e}.skill-list li:before{content:"— ";color:#a4543d}.timeline-item{border-bottom:1px solid #d1ccc2;padding:0 0 18px;margin-bottom:18px}.timeline-item>span{font:9px "DM Mono",monospace;color:#a4543d;letter-spacing:.08em}.timeline-item h4{font-size:17px;font-weight:600;margin:8px 0 3px}.timeline-item p{font-size:12px;color:#77736a;margin:0 0 7px}.timeline-item small{font-size:12px;line-height:1.6;color:#5d5a53}.education{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;border-top:1px solid #c9c4ba;margin-top:35px;padding-top:25px}.education .eyebrow{font-size:9px}.education p{font-size:12px;line-height:1.7;color:#55534e}.education strong{color:#222}.cv-note{font-size:10px;color:#817c72;margin-top:35px}.contact{background:#1b1b18;color:#f0eee8}.contact .section-kicker{color:#c17a61}.contact h2{font-size:clamp(70px,10vw,130px);margin:35px 0 80px}.contact-bottom{display:flex;justify-content:space-between;gap:40px;border-top:1px solid #48463f;padding-top:28px}.contact-bottom>p{max-width:280px;color:#aaa69d;line-height:1.7}.contact-email{font-size:clamp(20px,3vw,35px);letter-spacing:-.03em}.contact-phone{font:10px "DM Mono",monospace;color:#aaa69d;margin:15px 0 28px}.social-links{display:flex;gap:25px}.social-links a{font:9px "DM Mono",monospace;color:#c17a61}footer{padding:25px 5vw;background:#11110f;color:#e5e1d8;display:flex;justify-content:space-between;align-items:center}footer>span,footer>a:last-child{font:9px "DM Mono",monospace;color:#aaa69d;letter-spacing:.1em}
-@media(max-width:850px){.nav nav{gap:12px}.nav nav a{font-size:8px}.hero{padding:65px 7vw 75px;gap:4vw}.hero-image{height:390px}.section-pad{padding:75px 7vw}.music-grid{grid-template-columns:1fr 1fr}.music-card.featured{grid-column:span 2}.gallery figure img{height:280px}.gallery .gallery-large img{height:400px}.pro-columns{gap:5vw}}
-@media(max-width:620px){.topline{font-size:8px}.topline span:last-child{display:none}.nav{height:65px}.menu-toggle{display:block}.nav nav{display:none;position:absolute;top:64px;left:0;right:0;padding:20px 7vw;background:#f0eee8;flex-direction:column;gap:18px;border-bottom:1px solid #d4d0c7}.nav nav.open{display:flex}.nav nav a{font-size:10px}.hero{display:flex;flex-direction:column;align-items:stretch;padding:60px 7vw 80px}.hero h1{font-size:60px}.hero-image{height:380px}.hero-index{left:7vw;right:7vw}.about-grid,.pro-columns{grid-template-columns:1fr;gap:30px}.section-heading,.pro-intro,.creative-foot,.contact-bottom{display:block}.section-heading>p,.pro-intro>p{margin-top:24px}.music-grid{grid-template-columns:1fr}.music-card.featured{grid-column:auto}.gallery{grid-template-columns:1fr 1fr}.gallery .gallery-large{grid-column:span 2}.gallery figure img,.gallery .gallery-large img{height:300px}.press-list a{grid-template-columns:25px 1fr 20px;gap:12px}.press-list a span:nth-child(3){grid-column:2;grid-row:2}.press-list a b{grid-column:3;grid-row:1}.education{grid-template-columns:1fr;gap:10px}.contact h2{margin-bottom:45px}.contact-bottom>div{margin-top:30px}.social-links{flex-wrap:wrap}footer{gap:15px;flex-wrap:wrap}footer .wordmark{width:100%}}
+/* ==========================================================================
+   MR TIKINI / DARREN JAMES OKOT
+   SCI-FI STOIC / FUTURIST EDITORIAL — CAV EMPT × LEGOWELT INSPIRED
+   ========================================================================== */
+
+:root {
+  --bg: #ffffff;
+  --surface: #fafafa;
+  --ink: #0a0a0a;
+  --ink-secondary: #4a4a4a;
+  --border: #dcdcdc;
+  --border-strong: #0a0a0a;
+  --accent: #0044ff;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --max-width: 1180px;
+  --section-space: clamp(5rem, 10vw, 8.5rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0.75rem;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  left: 0.75rem;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.75rem);
+}
+
+/* HEADER & NAVIGATION
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding-block: 1rem;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.brand-primary {
+  font-weight: 700;
+}
+
+.brand-sep,
+.brand-secondary {
+  color: var(--ink-secondary);
+  font-weight: 500;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1.25rem;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  padding-inline: 0.35rem;
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.nav-num {
+  color: var(--ink-secondary);
+  font-weight: 400;
+}
+
+/* SECTIONS & TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+.section {
+  padding-block: var(--section-space);
+  border-bottom: 1px solid var(--border);
+}
+
+.section-header {
+  margin-bottom: 2.25rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.section-intro {
+  max-width: 64ch;
+  margin: 0 0 2.75rem;
+  color: var(--ink-secondary);
+}
+
+/* 01 HERO
+   -------------------------------------------------------------------------- */
+.hero-section {
+  padding-block: clamp(5rem, 10vw, 8.5rem);
+}
+
+.hero-title {
+  margin: 0 0 1.5rem;
+  font-size: clamp(3.25rem, 8vw, 6rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.hero-lead {
+  margin: 0 0 1.25rem;
+  max-width: 56ch;
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.hero-sub {
+  margin: 0 0 2.5rem;
+  max-width: 56ch;
+  color: var(--ink-secondary);
+}
+
+.inline-link {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.inline-link:hover {
+  color: var(--accent);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.85rem 1.6rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--border-strong);
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary {
+  background-color: var(--ink);
+  color: var(--bg);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.btn-secondary {
+  background-color: var(--bg);
+  color: var(--ink);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* 02 ABOUT — DUAL GRID
+   -------------------------------------------------------------------------- */
+.dual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.identity-block {
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border-strong);
+}
+
+.block-tag {
+  margin: 0 0 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+
+.block-title {
+  margin: 0 0 1rem;
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.body-copy {
+  margin: 0 0 1.5rem;
+  color: var(--ink-secondary);
+}
+
+.clean-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.clean-list li {
+  padding-block: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* 03 & 06 DIRECTORY ROWS (SPACIOUS TOUCH TARGETS)
+   -------------------------------------------------------------------------- */
+.directory-list {
+  border-top: 1px solid var(--border-strong);
+}
+
+.directory-row {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1.3fr) minmax(0, 1fr) 2rem;
+  align-items: center;
+  gap: 1rem;
+  min-height: 64px;
+  padding-block: 1.1rem;
+  padding-inline: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.directory-row:hover {
+  background-color: var(--surface);
+  color: var(--accent);
+}
+
+.row-index {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--ink-secondary);
+}
+
+.row-name {
+  font-weight: 600;
+  font-size: 1.0625rem;
+}
+
+.row-detail {
+  font-size: 0.95rem;
+  color: var(--ink-secondary);
+}
+
+.row-arrow {
+  text-align: right;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* 04 ARCHIVE — FULL ASPECT RATIO PORTFOLIO PLATES
+   -------------------------------------------------------------------------- */
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 4vw, 3.25rem);
+  align-items: start;
+}
+
+.plate-card {
+  margin: 0;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+}
+
+.plate-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+
+.enlarge-btn {
+  min-height: 40px;
+  padding: 0.4rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.enlarge-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.plate-img {
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;
+}
+
+/* 05 PROFESSIONAL CV TIMELINE
+   -------------------------------------------------------------------------- */
+.timeline-list {
+  border-top: 1px solid var(--border-strong);
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 14rem 1.2fr 1.2fr;
+  align-items: baseline;
+  gap: 0.75rem 2rem;
+  padding-block: 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-item span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+
+.timeline-item h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.timeline-item p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--ink-secondary);
+}
+
+.timeline-item small {
+  grid-column: 2 / -1;
+  font-size: 0.875rem;
+  color: var(--ink-secondary);
+}
+
+.cv-footer-action {
+  margin-top: 2.5rem;
+}
+
+/* 06 CONTACT
+   -------------------------------------------------------------------------- */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+.email-link {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  padding-block: 0.35rem;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.email-link:hover {
+  color: var(--accent);
+}
+
+.contact-directory .directory-row {
+  grid-template-columns: 3rem 1fr 2rem;
+}
+
+/* FOOTER
+   -------------------------------------------------------------------------- */
+.site-footer {
+  padding-block: 2.5rem;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.footer-copy,
+.back-to-top {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+  text-decoration: none;
+}
+
+.back-to-top {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.back-to-top:hover {
+  color: var(--accent);
+}
+
+/* LIGHTBOX
+   -------------------------------------------------------------------------- */
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background-color: rgba(255, 255, 255, 0.98);
+  display: flex;
+  flex-direction: column;
+}
+
+.lightbox-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.lightbox-caption {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lightbox-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lb-btn {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.lb-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.lb-btn-close {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.lb-btn-close:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.lightbox-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow: auto;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: calc(100vh - 7rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid var(--border);
+}
+
+/* RESPONSIVE — TABLET & MOBILE (IPHONE / ANDROID)
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .dual-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .timeline-item small {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 680px) {
+  .archive-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .directory-row {
+    grid-template-columns: 2.5rem 1fr 1.75rem;
+  }
+
+  .row-detail {
+    display: none;
+  }
+}
