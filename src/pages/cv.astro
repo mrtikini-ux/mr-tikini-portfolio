@@ -1,20 +1,163 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { sanity } from '../lib/sanity.js'
+
+let experiences = []
+let connectionOk = false
+
+try {
+  experiences = await sanity.fetch(`*[_type == "experience" && published == true] | order(order asc, startDate desc){
+    _id, title, organisation, location, startDate, endDate, isCurrent,
+    type, description, featured
+  }`)
+  experiences = experiences || []
+  connectionOk = true
+} catch {
+  connectionOk = false
+}
+
+function formatYear(dateStr) {
+  if (!dateStr) return ''
+  return new Date(dateStr).getFullYear()
+}
+
+function dateRange(item) {
+  const start = formatYear(item.startDate)
+  const end = item.isCurrent ? 'Present' : formatYear(item.endDate)
+  if (start && end) return `${start} – ${end}`
+  return start || end || ''
+}
 ---
 
 <BaseLayout title="CV — MR TIKINI" currentPath="/cv">
-  <section class="section">
+  <section class="section hero">
     <div class="container">
       <p class="section-label">CV</p>
       <h1>Experience</h1>
-      <p class="text-muted intro">Professional history, roles and selected collaborations.</p>
+      <p class="lead text-muted">
+        Professional history, roles and selected collaborations.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {experiences.length > 0 ? (
+        <div class="list">
+          {experiences.map((item) => (
+            <article class="list-item">
+              <div class="list-main">
+                <span class="meta">{item.type || 'Role'}</span>
+                <h3>{item.title}</h3>
+                <p class="org text-muted">
+                  {[item.organisation, item.location].filter(Boolean).join(' · ')}
+                </p>
+                {item.description && (
+                  <p class="desc text-muted">{item.description}</p>
+                )}
+              </div>
+              <div class="list-side text-subtle">
+                <span>{dateRange(item)}</span>
+                {item.isCurrent && <span class="badge">Current</span>}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk
+            ? 'No experience entries published yet.'
+            : 'Connect Sanity to load the CV.'}
+        </p>
+      )}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .intro {
+  .hero {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-lg);
+  }
+
+  .lead {
     margin-top: var(--space-md);
-    max-width: 42ch;
+    max-width: 40ch;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .list-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .meta {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+    margin-bottom: 0.3rem;
+  }
+
+  .list-item h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .org {
+    font-size: 0.875rem;
+  }
+
+  .desc {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    max-width: 56ch;
+  }
+
+  .list-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    padding-top: 0.15rem;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .empty {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .list-item {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .list-side {
+      align-items: flex-start;
+      flex-direction: row;
+      gap: 1rem;
+    }
   }
 </style>
