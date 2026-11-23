@@ -1,20 +1,193 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { sanity } from '../lib/sanity.js'
+
+let about = null
+let collaborators = []
+let connectionOk = false
+
+try {
+  const [aboutData, collabData] = await Promise.all([
+    sanity.fetch(`*[_type == "about" && language == "en" && published == true][0]{
+      title, introHeading, introText, biography, disciplines,
+      seoTitle, seoDescription,
+      "featuredCollaborators": featuredCollaborators[]->{
+        _id, name, type, website, slug
+      }
+    }`),
+    // Fallback featured collaborators if not set on about
+    sanity.fetch(`*[_type == "collaborator" && featured == true && published == true] | order(name asc)[0...12]{
+      _id, name, type, website, slug
+    }`),
+  ])
+
+  about = aboutData || null
+  collaborators =
+    about?.featuredCollaborators?.length > 0
+      ? about.featuredCollaborators
+      : collabData || []
+  connectionOk = true
+} catch {
+  connectionOk = false
+}
+
+const pageTitle = about?.seoTitle || about?.title || 'About'
+const pageDescription =
+  about?.seoDescription ||
+  about?.introText ||
+  'Biography and creative disciplines of MR TIKINI.'
+
+/** Simple portable text to plain paragraphs */
+function blocksToText(blocks) {
+  if (!Array.isArray(blocks)) return []
+  return blocks
+    .filter((b) => b._type === 'block' && Array.isArray(b.children))
+    .map((b) => b.children.map((c) => c.text || '').join(''))
+    .filter(Boolean)
+}
+
+const bioParagraphs = blocksToText(about?.biography)
 ---
 
-<BaseLayout title="About — MR TIKINI" currentPath="/about">
-  <section class="section">
+<BaseLayout
+  title={`${pageTitle} — MR TIKINI`}
+  description={pageDescription}
+  currentPath="/about"
+>
+  <section class="section about-hero">
     <div class="container">
       <p class="section-label">About</p>
-      <h1>About</h1>
-      <p class="text-muted intro">Biography, disciplines and selected collaborators will appear here once content is connected from Sanity.</p>
+      <h1>{about?.introHeading || about?.title || 'About'}</h1>
+
+      {about?.introText && (
+        <p class="lead text-muted">{about.introText}</p>
+      )}
+
+      {!about && (
+        <p class="lead text-muted">
+          {connectionOk
+            ? 'About content has not been published yet.'
+            : 'Connect Sanity to load the about page.'}
+        </p>
+      )}
     </div>
   </section>
+
+  {bioParagraphs.length > 0 && (
+    <section class="section">
+      <div class="container narrow">
+        <p class="section-label">Biography</p>
+        <div class="bio">
+          {bioParagraphs.map((para) => (
+            <p>{para}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {about?.disciplines?.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <p class="section-label">Disciplines</p>
+        <ul class="disciplines">
+          {about.disciplines.map((d) => (
+            <li>{d}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {collaborators.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <p class="section-label">Selected Collaborators</p>
+        <ul class="collab-list">
+          {collaborators.map((c) => (
+            <li>
+              {c.website ? (
+                <a href={c.website} target="_blank" rel="noopener noreferrer">
+                  {c.name}
+                </a>
+              ) : (
+                <span>{c.name}</span>
+              )}
+              {c.type && <span class="type text-subtle">{c.type}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
 </BaseLayout>
 
 <style>
-  .intro {
+  .about-hero {
+    padding-top: var(--space-2xl);
+  }
+
+  .lead {
     margin-top: var(--space-md);
     max-width: 42ch;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .narrow {
+    max-width: 640px;
+  }
+
+  .bio p {
+    margin-bottom: 1.25em;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-fg);
+  }
+
+  .bio p:last-child {
+    margin-bottom: 0;
+  }
+
+  .disciplines {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .collab-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .collab-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.95rem;
+  }
+
+  .collab-list li:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .collab-list a:hover {
+    color: var(--color-accent);
+  }
+
+  .type {
+    font-size: 0.75rem;
+    text-transform: capitalize;
+    flex-shrink: 0;
   }
 </style>
