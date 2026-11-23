@@ -46,6 +46,32 @@ export const project = defineType({
       title: 'Project Summary',
       type: 'text',
       rows: 3,
+      description: 'Short summary used in listings and cards',
+    }),
+
+    defineField({
+      name: 'body',
+      title: 'Project Content',
+      type: 'array',
+      of: [
+        { type: 'block' },
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+            },
+            {
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
+            },
+          ],
+        },
+      ],
     }),
 
     defineField({
@@ -59,7 +85,24 @@ export const project = defineType({
       name: 'gallery',
       title: 'Image Gallery',
       type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+            },
+            {
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
+            },
+          ],
+        },
+      ],
     }),
 
     defineField({
@@ -87,8 +130,28 @@ export const project = defineType({
     }),
 
     defineField({
+      name: 'seoTitle',
+      title: 'SEO Title',
+      type: 'string',
+    }),
+
+    defineField({
+      name: 'seoDescription',
+      title: 'SEO Description',
+      type: 'text',
+      rows: 3,
+    }),
+
+    defineField({
       name: 'featured',
       title: 'Feature on Website',
+      type: 'boolean',
+      initialValue: false,
+    }),
+
+    defineField({
+      name: 'published',
+      title: 'Published',
       type: 'boolean',
       initialValue: false,
     }),
@@ -99,6 +162,28 @@ export const project = defineType({
       title: 'title',
       subtitle: 'category',
       media: 'coverImage',
+      date: 'projectDate',
+    },
+    prepare({ title, subtitle, media, date }) {
+      const dateStr = date ? new Date(date).toLocaleDateString() : ''
+      return {
+        title: title || 'Untitled Project',
+        subtitle: [subtitle, dateStr].filter(Boolean).join(' · '),
+        media,
+      }
     },
   },
+
+  orderings: [
+    {
+      title: 'Project Date, Newest',
+      name: 'projectDateDesc',
+      by: [{ field: 'projectDate', direction: 'desc' }],
+    },
+    {
+      title: 'Title A–Z',
+      name: 'titleAsc',
+      by: [{ field: 'title', direction: 'asc' }],
+    },
+  ],
 })
