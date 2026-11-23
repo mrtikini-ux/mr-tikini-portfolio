@@ -88,6 +88,13 @@ export const collaborator = defineType({
       type: 'boolean',
       initialValue: false,
     }),
+
+    defineField({
+      name: 'published',
+      title: 'Published',
+      type: 'boolean',
+      initialValue: true,
+    }),
   ],
 
   preview: {
@@ -97,4 +104,17 @@ export const collaborator = defineType({
       media: 'logo',
     },
   },
+
+  orderings: [
+    {
+      title: 'Name A–Z',
+      name: 'nameAsc',
+      by: [{ field: 'name', direction: 'asc' }],
+    },
+    {
+      title: 'Type',
+      name: 'typeAsc',
+      by: [{ field: 'type', direction: 'asc' }],
+    },
+  ],
 })
