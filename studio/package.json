@@ -1,0 +1,16 @@
+
+{
+  "name": "mr-tikini-content-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/vision": "6.24.0",
+    "sanity": "6.24.0"
+  }
+}
