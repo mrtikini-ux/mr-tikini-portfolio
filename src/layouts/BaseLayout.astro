@@ -1,0 +1,73 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+  currentPath?: string
+}
+
+const {
+  title = 'MR TIKINI',
+  description = 'Creative direction, music, culture and projects by MR TIKINI.',
+  currentPath = '/',
+} = Astro.props
+
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/music', label: 'Music' },
+  { href: '/funktion', label: 'Funktion' },
+  { href: '/objects', label: 'Objects' },
+  { href: '/latest', label: 'Latest' },
+  { href: '/media', label: 'Media' },
+  { href: '/cv', label: 'CV' },
+  { href: '/contact', label: 'Contact' },
+]
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="inner">
+        <a href="/" class="logo">MR TIKINI</a>
+        <nav class="nav" aria-label="Main">
+          {
+            navItems.map((item) => (
+              <a
+                href={item.href}
+                aria-current={currentPath === item.href ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="inner">
+        <span>© {new Date().getFullYear()} MR TIKINI</span>
+        <span>Tokyo</span>
+      </div>
+    </footer>
+  </body>
+</html>
