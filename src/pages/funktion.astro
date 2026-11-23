@@ -1,20 +1,248 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { sanity } from '../lib/sanity.js'
+
+let upcoming = []
+let past = []
+let connectionOk = false
+
+const now = new Date().toISOString()
+
+try {
+  const [upcomingData, pastData] = await Promise.all([
+    sanity.fetch(
+      `*[_type == "funktionEvent" && published == true && (status == "upcoming" || date >= $now)] | order(date asc){
+        _id, title, slug, date, endDate, venue, city, country,
+        eventType, status, description, ticketUrl, featured
+      }`,
+      { now }
+    ),
+    sanity.fetch(
+      `*[_type == "funktionEvent" && published == true && (status == "past" || date < $now)] | order(date desc)[0...20]{
+        _id, title, slug, date, venue, city, country,
+        eventType, status, description
+      }`,
+      { now }
+    ),
+  ])
+
+  upcoming = upcomingData || []
+  past = pastData || []
+  connectionOk = true
+} catch {
+  connectionOk = false
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return ''
+  return new Date(dateStr).toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
 ---
 
 <BaseLayout title="Funktion — MR TIKINI" currentPath="/funktion">
-  <section class="section">
+  <section class="section hero">
     <div class="container">
       <p class="section-label">Funktion</p>
       <h1>Funktion</h1>
-      <p class="text-muted intro">Events, photography and archive for the Funktion platform.</p>
+      <p class="lead text-muted">
+        Events, nights and archive from the Funktion platform.
+      </p>
+
+      <nav class="subnav" aria-label="Funktion sections">
+        <a href="#upcoming">Upcoming</a>
+        <a href="#archive">Archive</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Upcoming -->
+  <section class="section" id="upcoming">
+    <div class="container">
+      <p class="section-label">Upcoming</p>
+
+      {upcoming.length > 0 ? (
+        <div class="list">
+          {upcoming.map((event) => (
+            <article class="list-item">
+              <div class="list-main">
+                <span class="meta">
+                  {[event.eventType, event.status].filter(Boolean).join(' · ')}
+                </span>
+                <h3>
+                  {event.ticketUrl ? (
+                    <a href={event.ticketUrl} target="_blank" rel="noopener noreferrer">
+                      {event.title}
+                    </a>
+                  ) : (
+                    event.title
+                  )}
+                </h3>
+                <p class="text-muted loc">
+                  {[event.venue, event.city, event.country].filter(Boolean).join(' · ')}
+                </p>
+                {event.description && (
+                  <p class="text-muted desc">{event.description}</p>
+                )}
+              </div>
+              <div class="list-side text-subtle">
+                <span>{formatDate(event.date)}</span>
+                {event.featured && <span class="badge">Featured</span>}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk
+            ? 'No upcoming Funktion events.'
+            : 'Connect Sanity to load events.'}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- Archive / Past -->
+  <section class="section" id="archive">
+    <div class="container">
+      <p class="section-label">Archive</p>
+
+      {past.length > 0 ? (
+        <div class="list">
+          {past.map((event) => (
+            <article class="list-item">
+              <div class="list-main">
+                <span class="meta">{event.eventType || 'Event'}</span>
+                <h3>{event.title}</h3>
+                <p class="text-muted loc">
+                  {[event.venue, event.city, event.country].filter(Boolean).join(' · ')}
+                </p>
+              </div>
+              <div class="list-side text-subtle">
+                <span>{formatDate(event.date)}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk
+            ? 'No past events in the archive yet.'
+            : 'Connect Sanity to load the archive.'}
+        </p>
+      )}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .intro {
+  .hero {
+    padding-top: var(--space-2xl);
+  }
+
+  .lead {
     margin-top: var(--space-md);
-    max-width: 42ch;
+    max-width: 40ch;
+    font-size: 1.05rem;
+  }
+
+  .subnav {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.8rem;
+  }
+
+  .subnav a {
+    color: var(--color-muted);
+  }
+
+  .subnav a:hover {
+    color: var(--color-accent);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .list-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .meta {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+    margin-bottom: 0.3rem;
+  }
+
+  .list-item h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .list-item h3 a:hover {
+    color: var(--color-accent);
+  }
+
+  .loc {
+    font-size: 0.875rem;
+  }
+
+  .desc {
+    margin-top: 0.4rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    max-width: 52ch;
+  }
+
+  .list-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    padding-top: 0.15rem;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .empty {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .list-item {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .list-side {
+      align-items: flex-start;
+      flex-direction: row;
+      gap: 1rem;
+    }
   }
 </style>
