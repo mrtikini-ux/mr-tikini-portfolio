@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="Contact — MR TIKINI" currentPath="/contact">
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Contact</p>
+      <h1>Contact</h1>
+      <p class="text-muted intro">Professional enquiries, DJ bookings and creative collaborations.</p>
+
+      <div class="contact-list">
+        <div class="contact-item">
+          <span class="label">DJ Bookings</span>
+          <span class="value text-muted">Coming from site settings</span>
+        </div>
+        <div class="contact-item">
+          <span class="label">Collaborations</span>
+          <span class="value text-muted">Coming from site settings</span>
+        </div>
+        <div class="contact-item">
+          <span class="label">Press</span>
+          <span class="value text-muted">Coming from site settings</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    margin-top: var(--space-md);
+    max-width: 42ch;
+    margin-bottom: var(--space-xl);
+  }
+
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 420px;
+  }
+
+  .contact-item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.9rem;
+  }
+
+  .contact-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .label {
+    font-weight: 500;
+  }
+</style>

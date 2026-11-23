@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="Music — MR TIKINI" currentPath="/music">
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Music</p>
+      <h1>Music</h1>
+      <p class="text-muted intro">DJ profile, mixes, releases and performances will be loaded from Sanity.</p>
+
+      <div class="subnav">
+        <a href="/music#mixes">Mixes & Radio</a>
+        <a href="/music#releases">Releases</a>
+        <a href="/music#performances">Performances</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    margin-top: var(--space-md);
+    max-width: 42ch;
+  }
+
+  .subnav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: var(--space-lg);
+    font-size: 0.85rem;
+  }
+
+  .subnav a {
+    color: var(--color-muted);
+  }
+
+  .subnav a:hover {
+    color: var(--color-accent);
+  }
+</style>
