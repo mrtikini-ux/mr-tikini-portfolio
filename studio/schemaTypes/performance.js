@@ -1,4 +1,3 @@
-
 import { defineType, defineField } from 'sanity'
 
 export const performance = defineType({
@@ -80,6 +79,13 @@ export const performance = defineType({
       title: 'Event Artwork',
       type: 'image',
       options: { hotspot: true },
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+        },
+      ],
     }),
 
     defineField({
@@ -90,6 +96,18 @@ export const performance = defineType({
         {
           type: 'image',
           options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+            },
+            {
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
+            },
+          ],
         },
       ],
     }),
@@ -141,6 +159,28 @@ export const performance = defineType({
       title: 'title',
       subtitle: 'venue',
       media: 'artwork',
+      date: 'date',
+    },
+    prepare({ title, subtitle, media, date }) {
+      const dateStr = date ? new Date(date).toLocaleDateString() : ''
+      return {
+        title: title || 'Untitled Performance',
+        subtitle: [subtitle, dateStr].filter(Boolean).join(' · '),
+        media,
+      }
     },
   },
+
+  orderings: [
+    {
+      title: 'Date, Newest',
+      name: 'dateDesc',
+      by: [{ field: 'date', direction: 'desc' }],
+    },
+    {
+      title: 'Date, Oldest',
+      name: 'dateAsc',
+      by: [{ field: 'date', direction: 'asc' }],
+    },
+  ],
 })
