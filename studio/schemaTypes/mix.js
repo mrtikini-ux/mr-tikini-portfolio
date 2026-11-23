@@ -1,4 +1,3 @@
-
 import { defineType, defineField } from 'sanity'
 
 export const mix = defineType({
@@ -52,9 +51,14 @@ export const mix = defineType({
       name: 'artwork',
       title: 'Cover Artwork',
       type: 'image',
-      options: {
-        hotspot: true,
-      },
+      options: { hotspot: true },
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+        },
+      ],
     }),
 
     defineField({
@@ -189,6 +193,28 @@ export const mix = defineType({
       title: 'title',
       subtitle: 'platform',
       media: 'artwork',
+      date: 'publishedDate',
+    },
+    prepare({ title, subtitle, media, date }) {
+      const dateStr = date ? new Date(date).toLocaleDateString() : ''
+      return {
+        title: title || 'Untitled Mix',
+        subtitle: [subtitle, dateStr].filter(Boolean).join(' · '),
+        media,
+      }
     },
   },
+
+  orderings: [
+    {
+      title: 'Publication Date, Newest',
+      name: 'publishedDateDesc',
+      by: [{ field: 'publishedDate', direction: 'desc' }],
+    },
+    {
+      title: 'Title A–Z',
+      name: 'titleAsc',
+      by: [{ field: 'title', direction: 'asc' }],
+    },
+  ],
 })
