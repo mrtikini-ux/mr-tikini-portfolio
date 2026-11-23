@@ -1,6 +1,22 @@
 ---
-const title = 'MR TIKINI';
-const description = 'Creative direction, music, culture and projects by MR TIKINI.';
+import { sanity } from '../lib/sanity.js'
+
+const title = 'MR TIKINI'
+const description = 'Creative direction, music, culture and projects by MR TIKINI.'
+
+let connectionStatus = 'not-configured'
+let projectCount = 0
+let errorMessage = ''
+
+try {
+  // Lightweight connectivity check — counts published projects
+  const result = await sanity.fetch(`count(*[_type == "project" && published == true])`)
+  projectCount = typeof result === 'number' ? result : 0
+  connectionStatus = 'connected'
+} catch (err) {
+  connectionStatus = 'error'
+  errorMessage = err instanceof Error ? err.message : 'Unable to reach Sanity'
+}
 ---
 
 <!doctype html>
@@ -14,7 +30,24 @@ const description = 'Creative direction, music, culture and projects by MR TIKIN
   <body>
     <main>
       <h1>{title}</h1>
-      <p>Website migration in progress.</p>
+      <p class="status">Website migration in progress.</p>
+
+      <section class="dev-status">
+        <h2>Sanity connection</h2>
+        {connectionStatus === 'connected' && (
+          <p class="ok">Connected · {projectCount} published project{projectCount === 1 ? '' : 's'}</p>
+        )}
+        {connectionStatus === 'error' && (
+          <p class="error">
+            Not connected yet.<br />
+            <span class="detail">{errorMessage}</span><br />
+            <span class="hint">Add SANITY_API_READ_TOKEN to .env for the private development dataset.</span>
+          </p>
+        )}
+        {connectionStatus === 'not-configured' && (
+          <p class="error">Sanity client not configured.</p>
+        )}
+      </section>
     </main>
   </body>
 </html>
@@ -41,10 +74,53 @@ const description = 'Creative direction, music, culture and projects by MR TIKIN
     font-size: 2rem;
     font-weight: 500;
     letter-spacing: -0.04em;
+    margin: 0 0 0.5rem;
   }
 
-  p {
+  .status {
     color: #666;
     font-size: 0.9rem;
+    margin-bottom: 3rem;
+  }
+
+  .dev-status {
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+    max-width: 480px;
+  }
+
+  .dev-status h2 {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #999;
+    margin: 0 0 0.75rem;
+  }
+
+  .ok {
+    color: #111;
+    font-size: 0.9rem;
+  }
+
+  .error {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .detail {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    color: #999;
+    word-break: break-word;
+  }
+
+  .hint {
+    display: block;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: #999;
   }
 </style>
