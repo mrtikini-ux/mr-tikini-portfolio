@@ -9,6 +9,7 @@ import { performance } from './performance.js'
 import { funktionEvent } from './funktionEvent.js'
 import { objectItem } from './objectItem.js'
 import { editorial } from './editorial.js'
+import { media } from './media.js'
 
 export const schemaTypes = [
   collaborator,
@@ -22,4 +23,5 @@ export const schemaTypes = [
   funktionEvent,
   objectItem,
   editorial,
+  media,
 ]
