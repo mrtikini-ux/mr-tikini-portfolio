@@ -1,126 +1,269 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro'
 import { sanity } from '../lib/sanity.js'
 
-const title = 'MR TIKINI'
-const description = 'Creative direction, music, culture and projects by MR TIKINI.'
-
-let connectionStatus = 'not-configured'
-let projectCount = 0
-let errorMessage = ''
+let projects = []
+let editorials = []
+let objects = []
+let connectionOk = false
 
 try {
-  // Lightweight connectivity check — counts published projects
-  const result = await sanity.fetch(`count(*[_type == "project" && published == true])`)
-  projectCount = typeof result === 'number' ? result : 0
-  connectionStatus = 'connected'
-} catch (err) {
-  connectionStatus = 'error'
-  errorMessage = err instanceof Error ? err.message : 'Unable to reach Sanity'
+  const [projectData, editorialData, objectData] = await Promise.all([
+    sanity.fetch(`*[_type == "project" && published == true] | order(projectDate desc)[0...6]{
+      _id, title, slug, category, summary, "cover": coverImage
+    }`),
+    sanity.fetch(`*[_type == "editorial" && published == true] | order(publishedAt desc)[0...3]{
+      _id, title, slug, format, excerpt, publishedAt
+    }`),
+    sanity.fetch(`*[_type == "objectItem" && published == true] | order(publishedAt desc)[0...4]{
+      _id, title, slug, category, itemType, shortDescription
+    }`),
+  ])
+  projects = projectData || []
+  editorials = editorialData || []
+  objects = objectData || []
+  connectionOk = true
+} catch {
+  connectionOk = false
 }
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
-  </head>
-  <body>
-    <main>
-      <h1>{title}</h1>
-      <p class="status">Website migration in progress.</p>
+<BaseLayout title="MR TIKINI" currentPath="/">
+  <!-- Hero -->
+  <section class="hero section">
+    <div class="container">
+      <p class="section-label">Portfolio</p>
+      <h1>Creative direction,<br />music and culture.</h1>
+      <p class="hero-lead text-muted">
+        MR TIKINI — DJ, creative director and cultural platform based in Tokyo.
+      </p>
+    </div>
+  </section>
 
-      <section class="dev-status">
-        <h2>Sanity connection</h2>
-        {connectionStatus === 'connected' && (
-          <p class="ok">Connected · {projectCount} published project{projectCount === 1 ? '' : 's'}</p>
-        )}
-        {connectionStatus === 'error' && (
-          <p class="error">
-            Not connected yet.<br />
-            <span class="detail">{errorMessage}</span><br />
-            <span class="hint">Add SANITY_API_READ_TOKEN to .env for the private development dataset.</span>
-          </p>
-        )}
-        {connectionStatus === 'not-configured' && (
-          <p class="error">Sanity client not configured.</p>
-        )}
-      </section>
-    </main>
-  </body>
-</html>
+  <!-- Selected Work -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Selected Work</p>
+        <a href="/projects" class="section-link">View all</a>
+      </div>
+
+      {projects.length > 0 ? (
+        <div class="card-grid">
+          {projects.map((project) => (
+            <a href={`/projects/${project.slug?.current || project._id}`} class="card">
+              <div class="card-media"></div>
+              <div class="card-body">
+                <span class="card-meta">{project.category || 'Project'}</span>
+                <h3>{project.title}</h3>
+                {project.summary && <p class="text-muted">{project.summary}</p>}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk ? 'No published projects yet.' : 'Connect Sanity to load selected work.'}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- Latest -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Latest</p>
+        <a href="/latest" class="section-link">View all</a>
+      </div>
+
+      {editorials.length > 0 ? (
+        <div class="list">
+          {editorials.map((item) => (
+            <a href={`/latest/${item.slug?.current || item._id}`} class="list-item">
+              <div>
+                <span class="card-meta">{item.format}</span>
+                <h3>{item.title}</h3>
+                {item.excerpt && <p class="text-muted">{item.excerpt}</p>}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk ? 'No editorial posts yet.' : 'Connect Sanity to load latest writing.'}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- Objects -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Objects</p>
+        <a href="/objects" class="section-link">View all</a>
+      </div>
+
+      {objects.length > 0 ? (
+        <div class="card-grid card-grid--4">
+          {objects.map((item) => (
+            <a href={`/objects/${item.slug?.current || item._id}`} class="card card--compact">
+              <div class="card-body">
+                <span class="card-meta">{item.category}</span>
+                <h3>{item.title}</h3>
+                {item.shortDescription && (
+                  <p class="text-muted">{item.shortDescription}</p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk ? 'No objects published yet.' : 'Connect Sanity to load recommendations.'}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- Contact teaser -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Contact</p>
+      <h2>Bookings & collaborations</h2>
+      <p class="text-muted contact-lead">
+        For DJ bookings, creative direction and brand collaborations.
+      </p>
+      <a href="/contact" class="text-link">Get in touch →</a>
+    </div>
+  </section>
+</BaseLayout>
 
 <style>
-  :global(*) {
-    box-sizing: border-box;
+  .hero {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-xl);
   }
 
-  :global(body) {
-    margin: 0;
-    padding: 48px;
-    background: #fff;
-    color: #111;
-    font-family: Inter, Arial, sans-serif;
+  .hero-lead {
+    margin-top: var(--space-md);
+    max-width: 36ch;
+    font-size: 1.05rem;
   }
 
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
   }
 
-  h1 {
-    font-size: 2rem;
-    font-weight: 500;
-    letter-spacing: -0.04em;
-    margin: 0 0 0.5rem;
+  .section-header .section-label {
+    margin-bottom: 0;
   }
 
-  .status {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 3rem;
+  .section-link {
+    font-size: 0.8rem;
+    color: var(--color-muted);
   }
 
-  .dev-status {
-    border-top: 1px solid #eee;
-    padding-top: 2rem;
-    max-width: 480px;
+  .section-link:hover {
+    color: var(--color-accent);
   }
 
-  .dev-status h2 {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  @media (min-width: 700px) {
+    .card-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .card-grid--4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .card {
+    display: block;
+  }
+
+  .card-media {
+    aspect-ratio: 4 / 3;
+    background: #f4f4f4;
+    margin-bottom: var(--space-sm);
+  }
+
+  .card-meta {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #999;
-    margin: 0 0 0.75rem;
+    color: var(--color-subtle);
+    margin-bottom: 0.35rem;
   }
 
-  .ok {
-    color: #111;
+  .card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .card p {
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .card--compact .card-media {
+    display: none;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .list-item {
+    display: block;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .list-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .list-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .list-item p {
+    font-size: 0.875rem;
+  }
+
+  .empty {
     font-size: 0.9rem;
   }
 
-  .error {
-    color: #666;
+  .contact-lead {
+    margin: var(--space-sm) 0 var(--space-md);
+    max-width: 32ch;
+  }
+
+  .text-link {
     font-size: 0.9rem;
-    line-height: 1.5;
+    color: var(--color-fg);
+    border-bottom: 1px solid var(--color-fg);
+    padding-bottom: 1px;
   }
 
-  .detail {
-    display: block;
-    margin-top: 0.35rem;
-    font-size: 0.8rem;
-    color: #999;
-    word-break: break-word;
-  }
-
-  .hint {
-    display: block;
-    margin-top: 0.75rem;
-    font-size: 0.8rem;
-    color: #999;
+  .text-link:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
   }
 </style>
