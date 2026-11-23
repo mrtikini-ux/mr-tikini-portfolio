@@ -1,1 +1,10 @@
-import { performance } from './performance.js'
+export const schemaTypes = [
+  collaborator,
+  project,
+  about,
+  siteSettings,
+  musicProfile,
+  mix,
+  release,
+  performance,
+]
