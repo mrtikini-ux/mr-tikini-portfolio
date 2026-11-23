@@ -10,6 +10,7 @@ import { funktionEvent } from './funktionEvent.js'
 import { objectItem } from './objectItem.js'
 import { editorial } from './editorial.js'
 import { media } from './media.js'
+import { experience } from './experience.js'
 
 export const schemaTypes = [
   collaborator,
@@ -24,4 +25,5 @@ export const schemaTypes = [
   objectItem,
   editorial,
   media,
+  experience,
 ]
