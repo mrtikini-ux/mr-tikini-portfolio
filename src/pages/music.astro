@@ -1,35 +1,281 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { sanity } from '../lib/sanity.js'
+
+let profile = null
+let mixes = []
+let releases = []
+let performances = []
+let connectionOk = false
+
+try {
+  const [profileData, mixData, releaseData, performanceData] = await Promise.all([
+    sanity.fetch(`*[_type == "musicProfile" && published == true][0]{
+      djName, tagline, intro, biography, genres, basedIn,
+      "portrait": portrait, "heroImage": heroImage,
+      socialLinks
+    }`),
+    sanity.fetch(`*[_type == "mix" && published == true] | order(publishedDate desc)[0...8]{
+      _id, title, slug, type, platform, publishedDate, duration,
+      listeningUrl, embedUrl, description
+    }`),
+    sanity.fetch(`*[_type == "release" && published == true] | order(releaseDate desc)[0...8]{
+      _id, title, slug, type, artist, label, catalogueNumber, releaseDate, format
+    }`),
+    sanity.fetch(`*[_type == "performance" && published == true] | order(date desc)[0...10]{
+      _id, title, slug, date, venue, city, country, eventType
+    }`),
+  ])
+
+  profile = profileData || null
+  mixes = mixData || []
+  releases = releaseData || []
+  performances = performanceData || []
+  connectionOk = true
+} catch {
+  connectionOk = false
+}
+
+const djName = profile?.djName || 'Tikini'
 ---
 
-<BaseLayout title="Music — MR TIKINI" currentPath="/music">
-  <section class="section">
+<BaseLayout title={`Music — ${djName}`} currentPath="/music">
+  <!-- Profile -->
+  <section class="section profile">
     <div class="container">
       <p class="section-label">Music</p>
-      <h1>Music</h1>
-      <p class="text-muted intro">DJ profile, mixes, releases and performances will be loaded from Sanity.</p>
+      <h1>{djName}</h1>
 
-      <div class="subnav">
-        <a href="/music#mixes">Mixes & Radio</a>
-        <a href="/music#releases">Releases</a>
-        <a href="/music#performances">Performances</a>
+      {profile?.tagline && (
+        <p class="tagline">{profile.tagline}</p>
+      )}
+
+      {profile?.intro && (
+        <p class="intro text-muted">{profile.intro}</p>
+      )}
+
+      {!profile && (
+        <p class="intro text-muted">
+          {connectionOk
+            ? 'Music profile has not been published yet.'
+            : 'Connect Sanity to load the music profile.'}
+        </p>
+      )}
+
+      {profile?.genres?.length > 0 && (
+        <ul class="genres">
+          {profile.genres.map((genre) => (
+            <li>{genre}</li>
+          ))}
+        </ul>
+      )}
+
+      {profile?.basedIn && (
+        <p class="based text-subtle">{profile.basedIn}</p>
+      )}
+
+      {profile?.socialLinks?.length > 0 && (
+        <div class="socials">
+          {profile.socialLinks.map((link) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer">
+              {link.platform}
+            </a>
+          ))}
+        </div>
+      )}
+
+      <nav class="subnav" aria-label="Music sections">
+        <a href="#mixes">Mixes & Radio</a>
+        <a href="#releases">Releases</a>
+        <a href="#performances">Performances</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Mixes -->
+  <section class="section" id="mixes">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Mixes & Radio</p>
       </div>
+
+      {mixes.length > 0 ? (
+        <div class="list">
+          {mixes.map((mix) => (
+            <article class="list-item">
+              <div class="list-main">
+                <span class="meta">
+                  {[mix.type, mix.platform].filter(Boolean).join(' · ')}
+                </span>
+                <h3>
+                  {mix.listeningUrl ? (
+                    <a href={mix.listeningUrl} target="_blank" rel="noopener noreferrer">
+                      {mix.title}
+                    </a>
+                  ) : (
+                    mix.title
+                  )}
+                </h3>
+                {mix.description && (
+                  <p class="text-muted desc">{mix.description}</p>
+                )}
+              </div>
+              <div class="list-side text-subtle">
+                {mix.duration && <span>{mix.duration}</span>}
+                {mix.publishedDate && (
+                  <span>{new Date(mix.publishedDate).getFullYear()}</span>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk ? 'No mixes published yet.' : 'Connect Sanity to load mixes.'}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- Releases -->
+  <section class="section" id="releases">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Releases & Productions</p>
+      </div>
+
+      {releases.length > 0 ? (
+        <div class="list">
+          {releases.map((release) => (
+            <article class="list-item">
+              <div class="list-main">
+                <span class="meta">
+                  {[release.type, release.format].filter(Boolean).join(' · ')}
+                </span>
+                <h3>{release.title}</h3>
+                <p class="text-muted desc">
+                  {[release.artist, release.label, release.catalogueNumber]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </p>
+              </div>
+              <div class="list-side text-subtle">
+                {release.releaseDate && (
+                  <span>{new Date(release.releaseDate).getFullYear()}</span>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk ? 'No releases published yet.' : 'Connect Sanity to load releases.'}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- Performances -->
+  <section class="section" id="performances">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Performances</p>
+      </div>
+
+      {performances.length > 0 ? (
+        <div class="list">
+          {performances.map((show) => (
+            <article class="list-item">
+              <div class="list-main">
+                <span class="meta">{show.eventType || 'Performance'}</span>
+                <h3>{show.title}</h3>
+                <p class="text-muted desc">
+                  {[show.venue, show.city, show.country].filter(Boolean).join(' · ')}
+                </p>
+              </div>
+              <div class="list-side text-subtle">
+                {show.date && (
+                  <span>
+                    {new Date(show.date).toLocaleDateString('en-GB', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </span>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="empty text-subtle">
+          {connectionOk ? 'No performances published yet.' : 'Connect Sanity to load performances.'}
+        </p>
+      )}
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  .profile {
+    padding-top: var(--space-2xl);
+  }
+
+  .tagline {
+    margin-top: var(--space-sm);
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
   .intro {
     margin-top: var(--space-md);
-    max-width: 42ch;
+    max-width: 48ch;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    list-style: none;
+    padding: 0;
+    margin: var(--space-md) 0 0;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  .based {
+    margin-top: var(--space-sm);
+    font-size: 0.8rem;
+  }
+
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: var(--space-md);
+    font-size: 0.8rem;
+  }
+
+  .socials a {
+    color: var(--color-muted);
+    text-transform: capitalize;
+  }
+
+  .socials a:hover {
+    color: var(--color-accent);
   }
 
   .subnav {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
-    margin-top: var(--space-lg);
-    font-size: 0.85rem;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.8rem;
   }
 
   .subnav a {
@@ -38,5 +284,77 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
   .subnav a:hover {
     color: var(--color-accent);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .list-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .meta {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+    margin-bottom: 0.3rem;
+  }
+
+  .list-item h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .list-item h3 a:hover {
+    color: var(--color-accent);
+  }
+
+  .desc {
+    font-size: 0.875rem;
+    line-height: 1.45;
+    max-width: 52ch;
+  }
+
+  .list-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    padding-top: 0.15rem;
+  }
+
+  .empty {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .list-item {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .list-side {
+      align-items: flex-start;
+      flex-direction: row;
+      gap: 1rem;
+    }
   }
 </style>
