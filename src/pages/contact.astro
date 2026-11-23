@@ -1,53 +1,101 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { sanity } from '../lib/sanity.js'
+
+let contactDetails = []
+let socialLinks = []
+let connectionOk = false
+
+try {
+  const settings = await sanity.fetch(`*[_type == "siteSettings"][0]{
+    contactDetails, socialLinks
+  }`)
+  contactDetails = settings?.contactDetails || []
+  socialLinks = settings?.socialLinks || []
+  connectionOk = true
+} catch {
+  connectionOk = false
+}
 ---
 
 <BaseLayout title="Contact — MR TIKINI" currentPath="/contact">
-  <section class="section">
+  <section class="section hero">
     <div class="container">
       <p class="section-label">Contact</p>
       <h1>Contact</h1>
-      <p class="text-muted intro">Professional enquiries, DJ bookings and creative collaborations.</p>
+      <p class="lead text-muted">
+        Professional enquiries, DJ bookings and creative collaborations.
+      </p>
 
-      <div class="contact-list">
-        <div class="contact-item">
-          <span class="label">DJ Bookings</span>
-          <span class="value text-muted">Coming from site settings</span>
+      {contactDetails.length > 0 ? (
+        <div class="contact-list">
+          {contactDetails.map((item) => (
+            <div class="contact-item">
+              <span class="label">{item.label || item.type}</span>
+              {item.email ? (
+                <a href={`mailto:${item.email}`} class="value">
+                  {item.email}
+                </a>
+              ) : (
+                <span class="value text-muted">—</span>
+              )}
+            </div>
+          ))}
         </div>
-        <div class="contact-item">
-          <span class="label">Collaborations</span>
-          <span class="value text-muted">Coming from site settings</span>
+      ) : (
+        <div class="contact-list">
+          <div class="contact-item">
+            <span class="label">Enquiries</span>
+            <span class="value text-muted">
+              {connectionOk
+                ? 'Add contact details in Site Settings'
+                : 'Connect Sanity to load contact details'}
+            </span>
+          </div>
         </div>
-        <div class="contact-item">
-          <span class="label">Press</span>
-          <span class="value text-muted">Coming from site settings</span>
+      )}
+
+      {socialLinks.length > 0 && (
+        <div class="socials">
+          <p class="section-label">Online</p>
+          <div class="social-links">
+            {socialLinks.map((link) => (
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                {link.platform}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .intro {
+  .hero {
+    padding-top: var(--space-2xl);
+  }
+
+  .lead {
     margin-top: var(--space-md);
-    max-width: 42ch;
+    max-width: 40ch;
     margin-bottom: var(--space-xl);
   }
 
   .contact-list {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    max-width: 420px;
+    max-width: 480px;
   }
 
   .contact-item {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
     gap: var(--space-md);
     padding: var(--space-md) 0;
     border-bottom: 1px solid var(--color-border);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
   .contact-item:first-child {
@@ -56,5 +104,34 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
   .label {
     font-weight: 500;
+  }
+
+  .value {
+    text-align: right;
+    word-break: break-all;
+  }
+
+  .value:hover {
+    color: var(--color-accent);
+  }
+
+  .socials {
+    margin-top: var(--space-2xl);
+  }
+
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: var(--space-sm);
+    font-size: 0.85rem;
+  }
+
+  .social-links a {
+    color: var(--color-muted);
+  }
+
+  .social-links a:hover {
+    color: var(--color-accent);
   }
 </style>
